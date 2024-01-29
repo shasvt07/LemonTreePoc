@@ -128,7 +128,8 @@ export const scanDl = async (req, res) =>{
       if(!checkPattern(userData)){
         res.status(404)
       }
-
+      
+      imageExtraction(url);
       console.log(userData);
 
       const newUserData = new Dl(userData);
@@ -139,4 +140,22 @@ export const scanDl = async (req, res) =>{
       console.error(error);
       res.status(404).json(error)
     }
+  }
+
+  export const imageExtraction = async (imageUrl) => {
+    const {spawn} = require('child_process');
+    const python = spawn('python', ['controllers/imageExtractor.py', imageUrl]);
+
+    python.stdout.on('data', (data) => {
+      const result = data.toString();
+      console.log('stdout: ' + result);
+    });
+
+    python.stderr.on('data', (data) => {
+        console.log('stderr: ' + data);
+    });
+
+    python.on('close', async (code) => {
+        console.log('child process exited with code ' + code.toString());
+    });
   }
