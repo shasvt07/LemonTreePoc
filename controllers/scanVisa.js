@@ -7,7 +7,7 @@ import { gptImage, scanGPTData } from "./openai.js";
 import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
 import Dl from "../models/dl.js";
-import Visa from "../models/Visa.js";
+import Visa from "../models/visa.js";
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_GENERATIVE_AI_API_KEY);

@@ -6,7 +6,6 @@ import { createWorker } from 'tesseract.js';
 import { gptImage, scanGPTData } from "./openai.js";
 import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
-import VoterId from "../models/VoterId.js";
 import Passport from "../models/passport.js";
 import { imageExtraction } from "./imageExtraction.js";
 dotenv.config();

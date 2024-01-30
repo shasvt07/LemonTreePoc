@@ -6,8 +6,9 @@ import { createWorker } from 'tesseract.js';
 import { gptImage, scanGPTData } from "./openai.js";
 import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
-import VoterId from "../models/VoterId.js";
+
 import { imageExtraction } from "./imageExtraction.js";
+import VoterId from "../models/voterId.js";
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_GENERATIVE_AI_API_KEY);
