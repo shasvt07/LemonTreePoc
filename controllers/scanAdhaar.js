@@ -8,6 +8,7 @@ import { gptImage, scanGPTData } from "./openai.js";
 import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
 import Adhaar from "../models/adhaar.js";
+import { imageExtraction } from "./imageExtraction.js";
 dotenv.config();
 
 
@@ -98,7 +99,7 @@ const scanTesseract = async (imageUrl) => {
       if(text===undefined){
         res.status(404).json("Please try again")
       }
-      console.log(text);
+      // console.log(text);
       return text;
   }catch(error){
     console.log(error);
@@ -106,25 +107,31 @@ const scanTesseract = async (imageUrl) => {
 }
 export const scanAdhaarFront = async (req, res) =>{
   // console.log(req.body)
+  const {idImage} = req.body;
   try {
-    const url = 'data:image/jpg;base64,'+req.body.idImage;
+    const url = 'data:image/jpg;base64,'+idImage;
+    // const profilephoto = await imageExtraction(idImage);
+    const profilephoto = await imageExtraction(idImage);
+    // console.log("profile",profilephoto);
+    // if(profilephoto===null || profilephoto===undefined){
+    //   res.status(404)
+    // }
     const text = await scanTesseract(url);
     // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
     // const text = ocrdata.ParsedResults[0].ParsedText;
     // const text = await gptImage(url);
     // const data = geminiScanImageData(url);
-    console.log(text);
+    // console.log(text);
     const str = await scanGPTData(text);
     // const str = geminiScanImageData(text);
     // const str = await parseData(text);
-    console.log(str);
+    // console.log(str);
     const startIndex = str.indexOf('{');
     const endIndex = str.lastIndexOf('}') + 1;
     // Extract the object substring
     const objectStr = str.substring(startIndex, endIndex);
     // Parse the extracted object into a JavaScript object
     const data = eval('(' + objectStr + ')');
-    console.log("data", data);
 
       if(!data){
         res.status(404)
@@ -134,6 +141,7 @@ export const scanAdhaarFront = async (req, res) =>{
                         dob: data.dob ? data.dob : null,
                         gender :data.gender ? data.gender : null,
                         adhaarNumber :data.idNumber ? data.idNumber: null,
+                        photo: profilephoto ? 'data:image/jpeg;base64'+profilephoto : "https://cirrusindia.co.in/wp-content/uploads/2016/10/dummy-profile-pic-male1.jpg",
                         }
       if(userData.name ===null || userData.dob===null || userData.adhaarNumber===null || userData.gender===null){
         res.status(404)
@@ -154,10 +162,9 @@ export const scanAdhaarFront = async (req, res) =>{
 
 
 
-
   export const scanAdhaarBack = async (req, res) =>{
     const {idImage,id}  = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     try {
       // var userData = Adhaar.findById(id);
       const url = 'data:image/jpeg;base64,'+idImage;
@@ -165,12 +172,12 @@ export const scanAdhaarFront = async (req, res) =>{
       // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
       // const text = ocrdata.ParsedResults[0].ParsedText;
         const text = await scanTesseract(url);
-        console.log(text);
+        // console.log(text);
         // const text = await gptImage(url);
         // const data = geminiScanImageData(url);
         // const str = await parseData(text);
         const str = await scanGPTData(text);
-        console.log(str);
+        // console.log(str);
         const startIndex = str.indexOf('{');
         const endIndex = str.lastIndexOf('}') + 1;
         // Extract the object substring

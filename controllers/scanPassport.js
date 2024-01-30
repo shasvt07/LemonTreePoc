@@ -8,6 +8,7 @@ import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
 import VoterId from "../models/VoterId.js";
 import Passport from "../models/passport.js";
+import { imageExtraction } from "./imageExtraction.js";
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_GENERATIVE_AI_API_KEY);
@@ -85,7 +86,7 @@ const scanTesseract = async (imageUrl) => {
       if(text===undefined){
         res.status(404).json("Please try again")
       }
-      console.log(text);
+      // console.log(text);
       return text;
   }catch(error){
     console.log(error);
@@ -96,23 +97,25 @@ export const scanPassport = async (req, res) =>{
   const {idImage} = req.body;
   try {
     const url = 'data:image/jpeg;base64,'+idImage;
+    const profilephoto = await imageExtraction(idImage);
+
     // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
     // const text = ocrdata.ParsedResults[0].ParsedText;
       const text = await scanTesseract(url);
       // const text = await gptImage(url);
       // const data = geminiScanImageData(url);
-      console.log(text);
+      // console.log(text);
     //   const str = await scanGPTData(text);
       // const str = geminiScanImageData(text);
       const str = await parseData(text);
-      console.log(str);
+      // console.log(str);
       const startIndex = str.indexOf('{');
       const endIndex = str.lastIndexOf('}') + 1;
       // Extract the object substring
       const objectStr = str.substring(startIndex, endIndex);
       // Parse the extracted object into a JavaScript object
       const data = eval('(' + objectStr + ')');
-      console.log(data);
+      // console.log(data);
       if(!data){
         res.status(404)
       }
@@ -120,7 +123,8 @@ export const scanPassport = async (req, res) =>{
         name : data.name ? data.name : null,
         dob: data.dob ? data.dob : null,
         gender: data.gender? data.dob : null,
-        expireDate: data.exp ? data.exp : null
+        expireDate: data.exp ? data.exp : null,
+        photo: profilephoto ? 'data:image/jpeg;base64'+profilephoto : "https://cirrusindia.co.in/wp-content/uploads/2016/10/dummy-profile-pic-male1.jpg",
       }
       if(userData.name === null || userData.dob === null || userData.gender === null || userData.expireDate === null){
         res.status(404)

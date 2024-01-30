@@ -86,7 +86,7 @@ const scanTesseract = async (imageUrl) => {
       if(text===undefined){
         res.status(404).json("Please try again")
       }
-      console.log(text);
+      // console.log(text);
       return text;
   }catch(error){
     console.log(error);
@@ -102,11 +102,11 @@ export const scanVisa = async (req, res) =>{
       const text = await scanTesseract(url);
       // const text = await gptImage(url);
       // const data = geminiScanImageData(url);
-      console.log(text);
+      // console.log(text);
     //   const str = await scanGPTData(text);
       // const str = geminiScanImageData(text);
       const str = await parseData(text);
-      console.log(str);
+      // console.log(str);
       const startIndex = str.indexOf('{');
       const endIndex = str.lastIndexOf('}') + 1;
       // Extract the object substring

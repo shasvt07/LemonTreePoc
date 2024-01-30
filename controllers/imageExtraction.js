@@ -6,13 +6,13 @@ const apiUrl = 'https://lemontreeflask.onrender.com/upload_image'; // Replace wi
 
 // Create a FormData object and append the image file
 // Make a POST request to the API endpoint with the image file
-    axios.post(apiUrl,{data:idImage}, {
+    await axios.post(apiUrl,{data:idImage}, {
     headers: {
         'Content-Type': 'application/json',
     },
     })
     .then(response => {
-        return response.data.data;
+        return response.data;
     })
     .catch(error => {
         console.error('Error:', error.message);

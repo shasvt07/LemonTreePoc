@@ -83,8 +83,8 @@ const scanTesseract = async (imageUrl) => {
       if(text===undefined){
         res.status(404).json("Please try again")
       }
-      console.log(text);
-      return text;
+      // console.log(text);
+      // return text;
   }catch(error){
     console.log(error);
   }
@@ -95,23 +95,25 @@ export const scanDl = async (req, res) =>{
   const { idImage } = req.body;
   try {
     const url = 'data:image/jpeg;base64,'+idImage;
+    const profilephoto = await imageExtraction(idImage);
+
     // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
     // const text = ocrdata.ParsedResults[0].ParsedText;
       const text = await scanTesseract(url);
       // const text = await gptImage(url);
       // const data = geminiScanImageData(url);
-      console.log(text);
+      // console.log(text);
     //   const str = await scanGPTData(text);
       // const str = geminiScanImageData(text);
       const str = await parseData(text);
-      console.log(str);
+      // console.log(str);
       const startIndex = str.indexOf('{');
       const endIndex = str.lastIndexOf('}') + 1;
       // Extract the object substring
       const objectStr = str.substring(startIndex, endIndex);
       // Parse the extracted object into a JavaScript object
       const data = eval('(' + objectStr + ')');
-      console.log(data);
+      // console.log(data);
       if(!data){
         res.status(404)
       }
@@ -121,6 +123,8 @@ export const scanDl = async (req, res) =>{
         gender: data.gender? data.gender : null,
         validity: data.validity ? data.validity : null,
         address: data.address ? data.address : null,
+        photo: profilephoto ? 'data:image/jpeg;base64'+profilephoto : "https://cirrusindia.co.in/wp-content/uploads/2016/10/dummy-profile-pic-male1.jpg",
+
       }
       if(userData.date_of_birth === null || userData.name ===null  || userData.validity === null|| data.address === null){
         res.status(404)
@@ -129,7 +133,6 @@ export const scanDl = async (req, res) =>{
         res.status(404)
       }
       
-      imageExtraction(url);
       console.log(userData);
 
       const newUserData = new Dl(userData);
@@ -140,22 +143,4 @@ export const scanDl = async (req, res) =>{
       console.error(error);
       res.status(404).json(error)
     }
-  }
-
-  export const imageExtraction = async (imageUrl) => {
-    const {spawn} = require('child_process');
-    const python = spawn('python', ['controllers/imageExtractor.py', imageUrl]);
-
-    python.stdout.on('data', (data) => {
-      const result = data.toString();
-      console.log('stdout: ' + result);
-    });
-
-    python.stderr.on('data', (data) => {
-        console.log('stderr: ' + data);
-    });
-
-    python.on('close', async (code) => {
-        console.log('child process exited with code ' + code.toString());
-    });
   }

@@ -82,7 +82,7 @@ const scanTesseract = async (imageUrl) => {
       if(text===undefined){
         res.status(404).json("Please try again")
       }
-      console.log(text);
+      // console.log(text);
       return text;
   }catch(error){
     console.log(error);
@@ -99,24 +99,24 @@ export const scanVoterIdFront = async (req, res) =>{
       const text = await scanTesseract(url);
       // const text = await gptImage(url);
       // const data = geminiScanImageData(url);
-      console.log(text);
+      // console.log(text);
       // const str = await scanGPTData(text);
       // const str = geminiScanImageData(text);
       const str = await parseData(text);
-      console.log(str);
+      // console.log(str);
       const startIndex = str.indexOf('{');
       const endIndex = str.lastIndexOf('}') + 1;
       // Extract the object substring
       const objectStr = str.substring(startIndex, endIndex);
       // Parse the extracted object into a JavaScript object
       const data = eval('(' + objectStr + ')');
-      console.log(data);
+      // console.log(data);
       if(!data){
         res.status(404)
       }
       const userData = {
         name : data.name ? data.name : "",
-        photo: profilephoto ? profilephoto : "https://cirrusindia.co.in/wp-content/uploads/2016/10/dummy-profile-pic-male1.jpg",
+        photo: profilephoto ? 'data:image/jpeg;base64'+profilephoto : "https://cirrusindia.co.in/wp-content/uploads/2016/10/dummy-profile-pic-male1.jpg",
       }
       if(userData.name === ""){
         res.status(404)
@@ -140,7 +140,7 @@ export const scanVoterIdFront = async (req, res) =>{
 
   export const scanVoterIdBack = async (req, res) =>{
     const {idImage,id}  = req.body;
-    console.log(id);
+    // console.log(id);
     try {
       var userData = VoterId.findById(id);
       const url = 'data:image/jpeg;base64,'+idImage;
@@ -148,12 +148,12 @@ export const scanVoterIdFront = async (req, res) =>{
       // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
       // const text = ocrdata.ParsedResults[0].ParsedText;
         const text = await scanTesseract(url);
-        console.log(text);
+        // console.log(text);
         // const text = await gptImage(url);
         // const data = geminiScanImageData(url);
         const str = await parseData(text);
         // const str = await scanGPTData(text);
-        console.log(str);
+        // console.log(str);
         const startIndex = str.indexOf('{');
         const endIndex = str.lastIndexOf('}') + 1;
         // Extract the object substring
