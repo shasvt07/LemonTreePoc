@@ -75,6 +75,9 @@ if (
 }
 const scanTesseract = async (imageUrl) => {
   try{
+    if(idImage===undefined || idImage===null){
+      res.status(404)
+    }
     const worker = await createWorker();
       await worker.loadLanguage('eng');
       await worker.initialize('eng');

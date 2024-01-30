@@ -91,6 +91,9 @@ if (
 }
 const scanTesseract = async (imageUrl) => {
   try{
+    if(imageUrl===undefined || imageUrl===null){
+      res.status(404)
+    }
     const worker = await createWorker();
       await worker.loadLanguage('eng');
       await worker.initialize('eng');
@@ -109,6 +112,9 @@ export const scanAdhaarFront = async (req, res) =>{
   // console.log(req.body)
   const {idImage} = req.body;
   try {
+    if(idImage===undefined || idImage===null){
+      res.status(404)
+    }
     const url = 'data:image/jpg;base64,'+idImage;
     // const profilephoto = await imageExtraction(idImage);
     const profilephoto = await imageExtraction(idImage);

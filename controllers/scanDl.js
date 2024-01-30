@@ -94,6 +94,9 @@ export const scanDl = async (req, res) =>{
   console.log(req.body);
   const { idImage } = req.body;
   try {
+    if(idImage===undefined || idImage===null){
+      res.status(404)
+    }
     const url = 'data:image/jpeg;base64,'+idImage;
     const profilephoto = await imageExtraction(idImage);
 
