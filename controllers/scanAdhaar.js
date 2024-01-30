@@ -112,7 +112,7 @@ export const scanAdhaarFront = async (req, res) =>{
   // console.log(req.body)
   const {idImage} = req.body;
   try {
-    if(idImage===undefined || idImage===null){
+    if(idImage===undefined || idImage===null || idImage===""){
       res.status(404)
     }
     const url = 'data:image/jpg;base64,'+idImage;

@@ -75,9 +75,6 @@ if (
 }
 const scanTesseract = async (imageUrl) => {
   try{
-    if(idImage===undefined || idImage===null){
-      res.status(404)
-    }
     const worker = await createWorker();
       await worker.loadLanguage('eng');
       await worker.initialize('eng');
@@ -96,6 +93,9 @@ const scanTesseract = async (imageUrl) => {
 export const scanVoterIdFront = async (req, res) =>{
   const {idImage} = req.body;
   try {
+    if(idImage===undefined || idImage===null || idImage===""){
+      res.status(404)
+    }
     const url = 'data:image/jpeg;base64,'+idImage;
     const profilephoto = await imageExtraction(idImage);
     // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});

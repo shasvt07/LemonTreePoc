@@ -95,7 +95,7 @@ const scanTesseract = async (imageUrl) => {
 export const scanPassport = async (req, res) =>{
   const {idImage} = req.body;
   try {
-    if(idImage===undefined || idImage===null){
+    if(idImage===undefined || idImage===null || idImage===""){
       res.status(404)
     }
     const url = 'data:image/jpeg;base64,'+idImage;
