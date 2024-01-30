@@ -38,4 +38,4 @@ const VisaSchema = new mongoose.Schema({
 {timestamps : true}
 );
 
-export default mongoose.model("Visa", VisaSchema);
+export default mongoose.model("visa", VisaSchema);

@@ -6,7 +6,6 @@ import { createWorker } from 'tesseract.js';
 import { gptImage, scanGPTData } from "./openai.js";
 import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
-import Dl from "../models/dl.js";
 import Visa from "../models/visa.js";
 dotenv.config();
 

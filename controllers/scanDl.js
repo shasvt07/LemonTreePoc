@@ -137,7 +137,6 @@ export const scanDl = async (req, res) =>{
 
       const newUserData = new Dl(userData);
       await newUserData.save();
-
       res.json(newUserData).status(200);
     }catch (error) {
       console.error(error);
