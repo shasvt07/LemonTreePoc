@@ -4,7 +4,6 @@ import {scanAdhaarBack, scanAdhaarFront} from '../controllers/scanAdhaar.js';
 import { createOrder, verifyPayment } from '../controllers/razorpay.js';
 import { maximumMatching } from '../controllers/maximumMatching.js';
 import { scanVoterIdBack, scanVoterIdFront} from '../controllers/ScanVoterId.js';
-import { scanVisa } from '../controllers/scanVisa.js';
 import { scanPassport } from '../controllers/scanPassport.js';
 import { scanDl } from '../controllers/scanDl.js';
 
@@ -27,7 +26,7 @@ router.post("/VoterIdScanfront",scanVoterIdFront);
 router.patch("/VoterIdScanback",scanVoterIdBack);
 router.post('/PassportScan', scanPassport);
 router.post("/DlScan",scanDl);
-router.patch('/VisaScan',scanVisa);
+router.patch('/VisaScan',scanDl);
 
 
 
