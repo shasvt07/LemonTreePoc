@@ -159,7 +159,7 @@ export const scanAdhaarFront = async (req, res) =>{
     const {idImage,id}  = req.body;
     console.log(req.body);
     try {
-      var userData = Adhaar.findById(id);
+      // var userData = Adhaar.findById(id);
       const url = 'data:image/jpeg;base64,'+idImage;
       // const text = await ocrSpace(url,{ apiKey: 'K89692836588957'});
       // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
@@ -200,23 +200,3 @@ export const scanAdhaarFront = async (req, res) =>{
       }
     }
 
-
-
-
-    export const imageVerification = async (imageUrl) => {
-      const {spawn} = require('child_process');
-      const python = spawn('python', ['controllers/imageVerification.py', imageUrl]);
-  
-      python.stdout.on('data', (data) => {
-        const result = data.toString();
-        console.log('stdout: ' + result);
-      });
-  
-      python.stderr.on('data', (data) => {
-          console.log('stderr: ' + data);
-      });
-  
-      python.on('close', async (code) => {
-          console.log('child process exited with code ' + code.toString());
-      });
-    }

@@ -7,6 +7,7 @@ import { gptImage, scanGPTData } from "./openai.js";
 import { geminiScanImageData } from "./gemini.js";
 import dotenv from "dotenv";
 import VoterId from "../models/VoterId.js";
+import { imageExtraction } from "./imageExtraction.js";
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_GENERATIVE_AI_API_KEY);
@@ -92,6 +93,7 @@ export const scanVoterIdFront = async (req, res) =>{
   const {idImage} = req.body;
   try {
     const url = 'data:image/jpeg;base64,'+idImage;
+    const profilephoto = await imageExtraction(idImage);
     // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
     // const text = ocrdata.ParsedResults[0].ParsedText;
       const text = await scanTesseract(url);
@@ -113,7 +115,8 @@ export const scanVoterIdFront = async (req, res) =>{
         res.status(404)
       }
       const userData = {
-        name : data.name ? data.name : ""
+        name : data.name ? data.name : "",
+        photo: profilephoto ? profilephoto : "https://cirrusindia.co.in/wp-content/uploads/2016/10/dummy-profile-pic-male1.jpg",
       }
       if(userData.name === ""){
         res.status(404)
