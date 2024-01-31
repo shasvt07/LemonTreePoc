@@ -111,6 +111,7 @@ const scanTesseract = async (imageUrl) => {
 export const scanAdhaarFront = async (req, res) =>{
   // console.log(req.body)
   const {idImage} = req.body;
+  // console.log(idImage);
   try {
     if(idImage===undefined || idImage===null || idImage===""){
       res.status(404)
@@ -127,7 +128,7 @@ export const scanAdhaarFront = async (req, res) =>{
     // const text = ocrdata.ParsedResults[0].ParsedText;
     // const text = await gptImage(url);
     // const data = geminiScanImageData(url);
-    // console.log(text);
+    console.log(text);
     const str = await scanGPTData(text);
     // const str = geminiScanImageData(text);
     // const str = await parseData(text);
@@ -156,6 +157,7 @@ export const scanAdhaarFront = async (req, res) =>{
         if(!checkPattern(userData)){
           res.status(404)
         }
+        console.log(userData);
         const newUserData = new Adhaar(userData);
         await newUserData.save();
         res.json(newUserData).status(200);
@@ -178,7 +180,10 @@ export const scanAdhaarFront = async (req, res) =>{
       // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
       // const text = ocrdata.ParsedResults[0].ParsedText;
         const text = await scanTesseract(url);
-        // console.log(text);
+        console.log(text);
+        if(text.search("Address") === -1){
+          res.status(404);
+        }
         // const text = await gptImage(url);
         // const data = geminiScanImageData(url);
         // const str = await parseData(text);
@@ -198,7 +203,7 @@ export const scanAdhaarFront = async (req, res) =>{
         const newUserData = {
             address :data.address? data.address : null,
         }
-        if(newUserData.name === "" || newUserData.dob=== null || newUserData.gender=== null){
+        if(newUserData.address === "" || newUserData.address === null){
           res.status(404);
         }
         if(!checkPattern(newUserData)){

@@ -100,9 +100,9 @@ export const scanDl = async (req, res) =>{
     const url = 'data:image/jpeg;base64,'+idImage;
     const profilephoto = await imageExtraction(idImage);
 
-    // const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
-    // const text = ocrdata.ParsedResults[0].ParsedText;
-      const text = await scanTesseract(url);
+    const ocrdata = await ocrSpace(url,{ apiKey: 'K89692836588957'});
+    const text = ocrdata.ParsedResults[0].ParsedText;
+      // const text = await scanTesseract(url);
       // const text = await gptImage(url);
       // const data = geminiScanImageData(url);
       // console.log(text);
